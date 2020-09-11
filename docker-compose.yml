@@ -1,0 +1,17 @@
+version: '3'
+services:
+  front:
+    build: ./client/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/:/usr/src/app/
+    command: npm start
+      
+  back:
+    build: ./server/
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./server/:/usr/src/app/
+    command: npm start
