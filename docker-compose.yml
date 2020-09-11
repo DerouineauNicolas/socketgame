@@ -7,6 +7,7 @@ services:
     volumes:
       - ./client/:/usr/src/app/
     command: npm start
+    stdin_open: true
       
   back:
     build: ./server/
