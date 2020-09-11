@@ -1,10 +1,16 @@
-var express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
 
-var app = express();
+const server = http.createServer({
+});
+const wss = new WebSocket.Server({ server });
 
-app.get('/', function(req, res) {
-    res.setHeader('Content-Type', 'text/plain');
-    res.send('Vous êtes à l\'accueil');
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
 });
 
-app.listen(8081);
+server.listen(8081);
