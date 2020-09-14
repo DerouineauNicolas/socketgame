@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [state, setGameState] = useState(0);
+  const [state, setGameState] = useState([]);
 
   useEffect(() => {
     // Create WebSocket connection.
@@ -18,12 +18,21 @@ function App() {
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
+        var object =  JSON.parse(event.data);
+        console.log(object)
+        setGameState(object);
     });
 
-  });
+  },[]);
+  
 
   return (
     <div className="App">
+      {state.Players &&
+        state.Players.map(player => {
+          return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
+        })}
+      }
     </div>
   );
 
