@@ -5,6 +5,11 @@ import './App.css';
 function App() {
   const [state, setGameState] = useState([]);
 
+
+  function onKeyUpValue(event) {
+      console.log("key up");
+  }
+
   useEffect(() => {
     // Create WebSocket connection.
     const socket = new WebSocket('ws://localhost:8081');
@@ -24,10 +29,11 @@ function App() {
     });
 
   },[]);
-  
+
+    
 
   return (
-    <div className="App">
+    <div className="App" onKeyUp={onKeyUpValue}>
       {state.Players &&
         state.Players.map(player => {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
