@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Controller from './Controller.js'
 
 function App() {
   const [state, setGameState] = useState([]);
-
-
-  function onKeyUpValue(event) {
-      console.log("key up");
-  }
+  
 
   useEffect(() => {
-    // Create WebSocket connection.
+
     const socket = new WebSocket('ws://localhost:8081');
 
     // Connection opened
@@ -33,13 +30,16 @@ function App() {
     
 
   return (
-    <div className="App" onKeyUp={onKeyUpValue}>
+    <div className="App">
       {state.Players &&
         state.Players.map(player => {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
         })}
       }
+      <Controller>
+      </Controller>
     </div>
+
   );
 
 }
