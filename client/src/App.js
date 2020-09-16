@@ -3,13 +3,13 @@ import logo from './logo.svg';
 import './App.css';
 import Controller from './Controller.js'
 
+const socket = new WebSocket('ws://localhost:8081');
+
 function App() {
   const [state, setGameState] = useState([]);
   
 
   useEffect(() => {
-
-    const socket = new WebSocket('ws://localhost:8081');
 
     // Connection opened
     socket.addEventListener('open', function (event) {
@@ -36,7 +36,7 @@ function App() {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
         })}
       }
-      <Controller>
+      <Controller websocket={socket}>
       </Controller>
     </div>
 
