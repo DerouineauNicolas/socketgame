@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-function Controller(websocket) {
+function Controller(props) {
 
   function HandleMove(event) {
-    console.log("key down");
-    console.log(event.keyCode);
-    console.log(websocket);
-    websocket.send('key down');
+    props.websocket.send('keydown:'+event.keyCode);
   }
   
   window.addEventListener('keydown', HandleMove);

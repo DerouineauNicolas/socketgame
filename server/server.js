@@ -17,13 +17,49 @@ function getUniqueID() {
   return s4() + s4() + '-' + s4();
 };
 
+function IncreasePlayerPosition(id, direction, minus) {
+  console.log("Increase Player" + id);
+  state.Players.forEach(function(player, index, object){
+    if (player.id === id){
+      console.log("found")
+      if (direction === "x" && !minus)
+        player.x += 1 
+      else if (direction === "x" && minus)
+        player.x -= 1
+      else if (direction === "y" && !minus)
+        player.y += 1
+      else if (direction === "y" && minus)
+        player.y -= 1  
+    }
+  });
+};
+
 
 wss.on('connection', function connection(ws) {
   ws.id = getUniqueID();
   var player = new game.Player(ws.id, ws.id);
   state.Players.push(player);
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+      console.log('receivedmessage: %s', message);
+      var n = message.lastIndexOf(':');
+      var messagetype = message.substring(0, n);
+      var messagepayload = message.substring(n + 1);
+      if(messagetype === 'keydown'){
+        
+        if (messagepayload==="38"){
+          console.log("increase y")
+          IncreasePlayerPosition(ws.id, "y", false)
+        }
+        if (messagepayload==="40"){
+          IncreasePlayerPosition(ws.id, "y", true)
+        }
+        if (messagepayload==="37"){
+          IncreasePlayerPosition(ws.id, "x", true)
+        }
+        if (messagepayload==="39"){
+          IncreasePlayerPosition(ws.id, "x", false)
+        }
+      }
   });
 
   ws.onclose = function(e) {

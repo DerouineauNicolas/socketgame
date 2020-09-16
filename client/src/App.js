@@ -10,13 +10,6 @@ function App() {
   
 
   useEffect(() => {
-
-    // Connection opened
-    socket.addEventListener('open', function (event) {
-        console.log('Send message to server');
-        socket.send('Hello Server!');
-    });
-
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
