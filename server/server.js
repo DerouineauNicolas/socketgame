@@ -1,6 +1,7 @@
 const http = require('http');
 const WebSocket = require('ws');
 const game = require('./game.js');
+const express = require('express');
 
 const server = http.createServer({
 });
@@ -78,3 +79,19 @@ wss.on('connection', function connection(ws) {
 });
 
 server.listen(8081);
+// Create a new instance of Express
+let app = express();
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+app.use(express.static(__dirname + '/usr/src/frontend/build/'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/usr/src/frontend/build/index.html'));
+});
