@@ -73,7 +73,7 @@ wss.on('connection', function connection(ws) {
 
   setInterval(function() {
     ws.send(JSON.stringify(state));
-  }, 500);
+  }, 20);
  
 });
 

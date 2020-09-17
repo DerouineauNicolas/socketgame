@@ -14,7 +14,7 @@ function App() {
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
         var object =  JSON.parse(event.data);
-        console.log(object)
+        //console.log(object)
         setGameState(object);
     });
 

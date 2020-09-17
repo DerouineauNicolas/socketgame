@@ -5,8 +5,11 @@ function Controller(props) {
   function HandleMove(event) {
     props.websocket.send('keydown:'+event.keyCode);
   }
-  
-  window.addEventListener('keydown', HandleMove);
+
+  useEffect(() => {
+    window.addEventListener('keydown', HandleMove);
+
+  },[]);
 
   return null;
 
