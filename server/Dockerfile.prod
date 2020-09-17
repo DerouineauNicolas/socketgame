@@ -2,7 +2,7 @@ FROM node:8
 
 #Build the frontend
 
-COPY ./frontend/ /usr/src/frontend
+COPY ./client/ /usr/src/frontend
 WORKDIR /usr/src/frontend
 RUN npm install
 RUN npm run build
@@ -10,5 +10,5 @@ RUN npm run build
 FROM node:8
 
 COPY --from=0 /usr/src/frontend/build/ /usr/src/frontend/build/
-COPY ./backend /usr/src/app/
+COPY ./server /usr/src/app/
 WORKDIR /usr/src/app
