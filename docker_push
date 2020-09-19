@@ -1,0 +1,4 @@
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+DOCKER_REPO="grosnico72/socketgame:${TRAVIS_BRANCH}"
+docker tag grosnico72/socketgame "$DOCKER_REPO"
+docker push "$DOCKER_REPO"

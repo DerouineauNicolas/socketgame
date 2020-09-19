@@ -1,6 +1,7 @@
 version: '3'
 services:     
   back_production:
+    image: grosnico72/socketgame:master
     build:
       context: .
       dockerfile: ./server/Dockerfile.prod
