@@ -7,6 +7,8 @@ services:
       dockerfile: ./server/Dockerfile.prod
     ports:
       - "8081:8081"
+    env_file:
+      - .env
     volumes:
       - ./server/:/usr/src/app/
     command: npm start

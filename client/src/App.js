@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import Controller from './Controller.js'
 
-const socket = new WebSocket('ws://localhost:8081');
+console.log(process.env);
+
+const socket = new WebSocket('ws://'+process.env.REACT_APP_WEBSOCKET_HOST);
 
 function App() {
   const [state, setGameState] = useState([]);
