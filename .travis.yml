@@ -9,6 +9,9 @@ services:
 install:
   - docker-compose -f docker-compose-prod.yml build
 
+script:
+  - echo "test -> to be done"
+
 deploy:
   provider: script
   script: bash docker_push
