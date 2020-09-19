@@ -1,9 +1,9 @@
 version: '3'
 services:     
-  back:
+  back_production:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile.prod
+      dockerfile: ./server/Dockerfile.prod
     ports:
       - "8081:8081"
     volumes:
