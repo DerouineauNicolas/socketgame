@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Controller from './Controller.js'
+import Vis from './Viewer.js'
 
 console.log(process.env);
 
@@ -25,7 +26,9 @@ function App() {
     
 
   return (
+    
     <div className="App">
+      <Vis></Vis>
       {state.Players &&
         state.Players.map(player => {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
