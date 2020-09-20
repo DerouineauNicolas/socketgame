@@ -26,6 +26,13 @@ const Vis = (props) => {
       var planematerial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
       var plane = new THREE.Mesh( planegeometry, planematerial );
 
+      for(var i = 0; i< 10;i++){
+        var cube = new THREE.Mesh( geometry, material );
+        scene.add(cube);
+        cubes.push(cube);
+      }
+
+
       scene.add(plane);
   
       camera.position.z = 50;
@@ -49,10 +56,15 @@ const Vis = (props) => {
       }
       
       const animate = () => {
-        
-        console.log(props);
+        if(props.gamestate.Players){
+          props.gamestate.Players.map((player, index) => {
+            cubes[index].position.x = player.x;
+            cubes[index].position.y = player.y;
+          })
+          console.log(cubes);
+        }
         renderScene()
-        frameId = window.requestAnimationFrame(animate)
+        frameId = window.requestAnimationFrame(animate);
       }
   
       const start = () => {
@@ -88,8 +100,12 @@ const Vis = (props) => {
         controls.current.start()
 
     }, [isAnimating])
+
+    const activateLasers = () => {
+      console.log(props.gamestate.Players);
+    }
     
-    return <div className="vis" ref={mount} />
+    return <div className="vis" ref={mount} onClick={activateLasers}/>
   }
 
   export default Vis;

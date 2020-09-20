@@ -28,7 +28,7 @@ function App() {
   return (
     
     <div className="App">
-      <Vis> gamestate={state}</Vis>
+      <Vis gamestate={state}></Vis>
       {state.Players &&
         state.Players.map(player => {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
