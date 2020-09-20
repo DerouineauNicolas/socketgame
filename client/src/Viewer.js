@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 
-const Vis = () => {
+var cubes = [];
+var scene;
+
+const Vis = (props) => {
     const { useRef, useEffect, useState } = React
     const mount = useRef(null)
     const [isAnimating, setAnimating] = useState(true)
@@ -11,16 +14,24 @@ const Vis = () => {
       let width = mount.current.clientWidth
       let height = mount.current.clientHeight
       let frameId
+      console.log(props);
   
-      const scene = new THREE.Scene()
-      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+      scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 1000)
       const renderer = new THREE.WebGLRenderer({ antialias: true })
       const geometry = new THREE.BoxGeometry(1, 1, 1)
       const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
-      const cube = new THREE.Mesh(geometry, material)
+
+      var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
+      var planematerial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+      var plane = new THREE.Mesh( planegeometry, planematerial );
+
+      scene.add(plane);
   
-      camera.position.z = 4
-      scene.add(cube)
+      camera.position.z = 50;
+      camera.position.y = 50;
+      camera.up.set( 0, 0, 1 );
+      camera.lookAt(0, 0, 0);
       renderer.setClearColor('#000000')
       renderer.setSize(width, height)
   
@@ -38,9 +49,8 @@ const Vis = () => {
       }
       
       const animate = () => {
-        cube.rotation.x += 0.01
-        cube.rotation.y += 0.01
-  
+        
+        console.log(props);
         renderScene()
         frameId = window.requestAnimationFrame(animate)
       }
@@ -67,21 +77,19 @@ const Vis = () => {
         window.removeEventListener('resize', handleResize)
         mount.current.removeChild(renderer.domElement)
   
-        scene.remove(cube)
+        //scene.remove(cube)
         geometry.dispose()
         material.dispose()
       }
     }, [])
   
     useEffect(() => {
-      if (isAnimating) {
+
         controls.current.start()
-      } else {
-        controls.current.stop()
-      }
+
     }, [isAnimating])
     
-    return <div className="vis" ref={mount} onClick={() => setAnimating(!isAnimating)} />
+    return <div className="vis" ref={mount} />
   }
 
   export default Vis;
