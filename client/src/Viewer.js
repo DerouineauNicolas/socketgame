@@ -3,12 +3,23 @@ import * as THREE from 'three'
 
 var cubes = [];
 var scene;
+var gamestate = [];
+
+function getRandomColor() {
+  var letters = '0123456789abcdef';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 const Vis = (props) => {
     const { useRef, useEffect, useState } = React
     const mount = useRef(null)
     const [isAnimating, setAnimating] = useState(true)
     const controls = useRef(null)
+    gamestate = props.gamestate;
     
     useEffect(() => {
       let width = mount.current.clientWidth
@@ -19,15 +30,19 @@ const Vis = (props) => {
       scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 1000)
       const renderer = new THREE.WebGLRenderer({ antialias: true })
-      const geometry = new THREE.BoxGeometry(1, 1, 1)
-      const material = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+
 
       var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
-      var planematerial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+
+      var planematerial = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
+      
       var plane = new THREE.Mesh( planegeometry, planematerial );
 
       for(var i = 0; i< 10;i++){
+        const geometry = new THREE.BoxGeometry(1, 1, 1)
+        const material = new THREE.MeshBasicMaterial({ color: ((255.0)/(10.0)) * i * 0xffffff })
         var cube = new THREE.Mesh( geometry, material );
+        cube.visible = false;
         scene.add(cube);
         cubes.push(cube);
       }
@@ -36,7 +51,7 @@ const Vis = (props) => {
       scene.add(plane);
   
       camera.position.z = 50;
-      camera.position.y = 50;
+      camera.position.y = -50;
       camera.up.set( 0, 0, 1 );
       camera.lookAt(0, 0, 0);
       renderer.setClearColor('#000000')
@@ -56,12 +71,14 @@ const Vis = (props) => {
       }
       
       const animate = () => {
-        if(props.gamestate.Players){
-          props.gamestate.Players.map((player, index) => {
+        //console.log(props);
+        if(gamestate.Players){
+          gamestate.Players.map((player, index) => {
             cubes[index].position.x = player.x;
             cubes[index].position.y = player.y;
+            cubes[index].visible = true;
           })
-          console.log(cubes);
+          //console.log(cubes);
         }
         renderScene()
         frameId = window.requestAnimationFrame(animate);
@@ -90,8 +107,8 @@ const Vis = (props) => {
         mount.current.removeChild(renderer.domElement)
   
         //scene.remove(cube)
-        geometry.dispose()
-        material.dispose()
+        //geometry.dispose()
+        //material.dispose()
       }
     }, [])
   
@@ -101,11 +118,11 @@ const Vis = (props) => {
 
     }, [isAnimating])
 
-    const activateLasers = () => {
-      console.log(props.gamestate.Players);
-    }
     
-    return <div className="vis" ref={mount} onClick={activateLasers}/>
+    return (
+        <div className="vis" ref={mount}>
+       </div>
+    )
   }
 
   export default Vis;
