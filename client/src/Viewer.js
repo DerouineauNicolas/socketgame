@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 
-var cubes = [];
+var oldplayerset = new Set();
 var scene;
 var gamestate = [];
+var num_player = 0;
 
 
 function initGameContext(mount)
@@ -23,15 +24,6 @@ function initGameContext(mount)
   var planematerial = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
   
   var plane = new THREE.Mesh( planegeometry, planematerial );
-
-  for(var i = 0; i< 10;i++){
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ color: ((255.0)/(10.0)) * i * 0xffffff })
-    var cube = new THREE.Mesh( geometry, material );
-    cube.visible = false;
-    scene.add(cube);
-    cubes.push(cube);
-  }
 
 
   scene.add(plane);
@@ -58,11 +50,40 @@ function initGameContext(mount)
   
   const animate = () => {
     if(gamestate.Players){
+      let newplayerset = new Set();
+      // 1, Add new player, and update positions of the old ones
       gamestate.Players.map((player, index) => {
-        cubes[index].position.x = player.x;
-        cubes[index].position.y = player.y;
-        cubes[index].visible = true;
+        var mesh = scene.getObjectByName( player.name)
+        if (!mesh){
+          const geometry = new THREE.BoxGeometry(1, 1, 1)
+          const material = new THREE.MeshBasicMaterial({ color: ((255.0)/(10.0)) * num_player * 0xffffff })
+          var cube = new THREE.Mesh( geometry, material );
+          cube.name = player.name;
+          cube.position.set( player.x, player.y, 1 );
+          cube.visible = true;
+          scene.add(cube);
+          oldplayerset.add(player.name);
+          num_player++;
+        }
+        else{
+          mesh.position.set( player.x, player.y, 1 );
+        }
+        newplayerset.add(player.name);
       })
+      // 2, Remove players which are not in the game anymore
+      let difference = new Set(
+        [...oldplayerset].filter(x => !newplayerset.has(x)));
+
+      difference.forEach( element => {
+              var mesh = scene.getObjectByName( element);
+              if(mesh){
+                scene.remove(mesh);
+                /*TBD: Memory should be cleared here !!! */
+              }
+          }
+        
+      );
+
     }
     renderScene()
     frameId = window.requestAnimationFrame(animate);
