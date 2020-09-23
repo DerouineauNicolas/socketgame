@@ -88,7 +88,7 @@ function initGameContext(mount)
       gamestate.Points.map((point, index) => {
         var mesh = scene.getObjectByName( point.id)
         if (!mesh){
-          const geometry = new THREE.DodecahedronBufferGeometry(1,0);
+          const geometry = new THREE.BoxGeometry(1, 1, 1);
           const material = new THREE.MeshBasicMaterial({ color:0xff0000} );
           var cube = new THREE.Mesh( geometry, material );
           cube.name = point.name;

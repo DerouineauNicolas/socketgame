@@ -50,7 +50,7 @@ module.exports.Points = Points;
 function PointsSet(TerrainWidth, TerrainHeight, NumPoints) {
   var pointsets = [];
   for (var i = 0; i < NumPoints; i++ ){
-    var points = new Points((Math.random() * TerrainWidth), (Math.random() * TerrainHeight), getUniqueID());
+    var points = new Points((Math.random() * TerrainWidth) - (TerrainWidth/2.0), (Math.random() * TerrainHeight) - (TerrainHeight/2.0), getUniqueID());
     pointsets.push(points);
   }
   return pointsets;
