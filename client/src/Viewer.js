@@ -84,6 +84,22 @@ function initGameContext(mount)
         
       );
 
+      // 3, Add new points, and update positions of the old ones
+      gamestate.Points.map((point, index) => {
+        var mesh = scene.getObjectByName( point.id)
+        if (!mesh){
+          const geometry = new THREE.DodecahedronBufferGeometry(1,0);
+          const material = new THREE.MeshBasicMaterial({ color:0xff0000} );
+          var cube = new THREE.Mesh( geometry, material );
+          cube.name = point.name;
+          cube.position.set( point.x, point.y, 1 );
+          cube.visible = true;
+          scene.add(cube);
+          //oldplayerset.add(point.id);
+          //num_player++;
+        }
+      })
+
     }
     renderScene()
     frameId = window.requestAnimationFrame(animate);
