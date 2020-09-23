@@ -90,7 +90,7 @@ wss.on('connection', function connection(ws) {
   setInterval(function() {
     //console.log(state);
     ws.send(JSON.stringify(state));
-  }, 50);
+  }, 20);
  
 });
 

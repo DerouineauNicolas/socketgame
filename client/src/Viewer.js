@@ -91,7 +91,7 @@ function initGameContext(mount)
           const geometry = new THREE.BoxGeometry(1, 1, 1);
           const material = new THREE.MeshBasicMaterial({ color:0xff0000} );
           var cube = new THREE.Mesh( geometry, material );
-          cube.name = point.name;
+          cube.name = point.id;
           cube.position.set( point.x, point.y, 1 );
           cube.visible = true;
           scene.add(cube);
