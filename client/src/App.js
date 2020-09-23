@@ -15,9 +15,7 @@ function App() {
   useEffect(() => {
     // Listen for messages
     socket.addEventListener('message', function (event) {
-        //console.log('Message from server ', event.data);
         var object =  JSON.parse(event.data);
-        //console.log(object)
         setGameState(object);
     });
 
@@ -32,6 +30,10 @@ function App() {
       {state.Players &&
         state.Players.map(player => {
           return <li> name = {player.name} position: x = {player.x},  y = {player.y} </li>;
+        })}
+      {state.Points &&
+        state.Points.map(point => {
+          return <li> point = position: x = {point.x},  y = {point.y} </li>;
         })}
       }
       <Controller websocket={socket}>

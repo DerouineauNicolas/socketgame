@@ -6,13 +6,7 @@ const express = require('express');
 
 var state = {
   Players: [],
-};
-
-function getUniqueID() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4();
+  Points: game.PointsSet(50, 20, 5)
 };
 
 function IncreasePlayerPosition(id, direction, minus) {
@@ -58,7 +52,7 @@ server.listen(8081);
 
 const wss = new WebSocket.Server({ server });
 wss.on('connection', function connection(ws) {
-  ws.id = getUniqueID();
+  ws.id = game.getUniqueID();
   var player = new game.Player(ws.id, ws.id);
   state.Players.push(player);
   ws.on('message', function incoming(message) {
@@ -94,8 +88,9 @@ wss.on('connection', function connection(ws) {
   };
 
   setInterval(function() {
+    console.log(state);
     ws.send(JSON.stringify(state));
-  }, 20);
+  }, 50);
  
 });
 
