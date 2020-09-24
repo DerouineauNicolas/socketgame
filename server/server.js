@@ -29,6 +29,7 @@ function IncreasePlayerPosition(id, direction, minus) {
           && (player.y > (points.y-1))  
           && (player.y < (points.y+1)))){
             object.splice(index, 1);
+            player.score += 1;
           }
     })
     if (state.Points.length == 0){

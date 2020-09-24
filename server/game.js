@@ -14,6 +14,7 @@ function Player(id, name) {
   this.name = name;
   this.x = 0;
   this.y = 0;
+  this.score = 0;
 }
 
 Player.prototype = {
@@ -31,6 +32,7 @@ function Points(x, y, id) {
   this.x = x;
   this.y = y;
   this.id = id;
+  
 }
 
 Player.prototype = {
