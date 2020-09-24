@@ -44,3 +44,11 @@ code {
   height: 80%;
 }
 
+.label {
+  position: absolute;
+  color: #FFF;
+  font-family: sans-serif;
+  padding: 2px;
+  background: rgba( 0, 0, 0, .6 );
+}
+

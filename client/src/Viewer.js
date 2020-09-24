@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 var oldplayerset = new Set();
 var oldpointset = new Set();
@@ -20,6 +21,8 @@ function initGameContext(mount)
   const renderer = new THREE.WebGLRenderer({ antialias: true })
 
 
+
+
   var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
 
   var planematerial = new THREE.MeshLambertMaterial({
@@ -36,7 +39,14 @@ function initGameContext(mount)
 
   var directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.5);
   directionalLight2.position.set(-20, -50, 50);
-  scene.add( directionalLight2 );  
+  scene.add( directionalLight2 );
+  
+  var controls = new OrbitControls( camera, renderer.domElement );
+
+    //controls.update() must be called after any manual changes to the camera's transform
+  camera.position.set( 0, 20, 100 );
+  controls.update();
+  controls.enableKeys = false;
 
 
   scene.add(plane);
@@ -115,9 +125,6 @@ function initGameContext(mount)
         newpointset.add(point.id);
       })
 
-      console.log(oldpointset);
-      console.log(newpointset)
-
       // 4, Remove points which are not in the game anymore
       difference = new Set(
         [...oldpointset].filter(x => !newpointset.has(x)));
@@ -133,6 +140,9 @@ function initGameContext(mount)
       );
 
     }
+    controls.update();
+
+    renderer.render( scene, camera );
     renderScene()
     frameId = window.requestAnimationFrame(animate);
   }
@@ -166,6 +176,7 @@ const Vis = (props) => {
 
     return (
         <div className="vis" ref={mount}>
+          <div className="label" ref={mount}> Use → ↑ ← ↓ to move around the game</div>
        </div>
     )
   }
