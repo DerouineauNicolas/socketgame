@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as THREE from 'three'
 
 var oldplayerset = new Set();
+var oldpointset = new Set();
 var scene;
 var gamestate = [];
 var num_player = 1;
@@ -63,6 +64,7 @@ function initGameContext(mount)
   const animate = () => {
     if(gamestate.Players){
       let newplayerset = new Set();
+      let newpointset = new Set();
       // 1, Add new player, and update positions of the old ones
       gamestate.Players.map((player, index) => {
         var mesh = scene.getObjectByName( player.name)
@@ -107,10 +109,28 @@ function initGameContext(mount)
           cube.position.set( point.x, point.y, 1 );
           cube.visible = true;
           scene.add(cube);
-          //oldplayerset.add(point.id);
+          oldpointset.add(point.id);
           //num_player++;
         }
+        newpointset.add(point.id);
       })
+
+      console.log(oldpointset);
+      console.log(newpointset)
+
+      // 4, Remove points which are not in the game anymore
+      difference = new Set(
+        [...oldpointset].filter(x => !newpointset.has(x)));
+
+      difference.forEach( element => {
+              var mesh = scene.getObjectByName( element);
+              if(mesh){
+                scene.remove(mesh);
+                /*TBD: Memory should be cleared here !!! */
+              }
+          }
+        
+      );
 
     }
     renderScene()

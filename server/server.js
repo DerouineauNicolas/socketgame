@@ -23,7 +23,19 @@ function IncreasePlayerPosition(id, direction, minus) {
       else if (direction === "y" && minus)
         player.y -= 1  
     }
+    state.Points.forEach( (points, index, object) => {
+      if ((player.x > (points.x-1)  
+          && (player.x < (points.x+1)) 
+          && (player.y > (points.y-1))  
+          && (player.y < (points.y+1)))){
+            object.splice(index, 1);
+          }
+    })
+    if (state.Points.length == 0){
+      state.Points = game.PointsSet(50, 20, 5);
+    }
   });
+  
 };
 
 
