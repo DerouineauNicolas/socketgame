@@ -15,7 +15,7 @@ var AudioManager = function() {
     });
 
     this.getRandomBuffer = function() {
-        return buffers[0];
+        return buffers[Math.floor(Math.random() * 2)];
     }
 
     this.isready = function() {
