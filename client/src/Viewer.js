@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import fragmentShader from './shader.js'
+import AudioManager from './audio.js'
 
 var oldplayerset = new Set();
 var oldpointset = new Set();
@@ -13,7 +14,6 @@ var listener = new THREE.AudioListener();
 
 // create a global audio source
 var soundAmbiance = new THREE.Audio( listener );
-var bnote = new THREE.Audio( listener );
 
 // load a sound and set it as the Audio object's buffer
 var audioLoader = new THREE.AudioLoader();
@@ -23,8 +23,6 @@ audioLoader.load( 'ambiance.mp3', function( buffer ) {
 	soundAmbiance.setVolume( 0.5 );
 	soundAmbiance.play();
 });
-
-var abuffer = null;
 
 function initGameContext(mount)
 {
@@ -36,10 +34,6 @@ function initGameContext(mount)
   scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 1000)
   const renderer = new THREE.WebGLRenderer({ antialias: true })
-
-  audioLoader.load( 'a.mp3', function( buffer ) {
-    abuffer = buffer;
-  });
 
   var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
 
@@ -83,6 +77,8 @@ function initGameContext(mount)
     renderer.render(scene, camera)
   }
 
+  var audiomanager = new AudioManager();
+
   const handleResize = () => {
     width = mount.current.clientWidth
     height = mount.current.clientHeight
@@ -93,7 +89,7 @@ function initGameContext(mount)
   }
   
   const animate = (time) => {
-    if(gamestate.Players){
+    if(gamestate.Players && audiomanager.isready()){
       let newplayerset = new Set();
       let newpointset = new Set();
       // 1, Add new player, and update positions of the old ones
@@ -140,7 +136,7 @@ function initGameContext(mount)
           cube.position.set( point.x, point.y, 1 );
           cube.visible = true;
           var audio = new THREE.PositionalAudio( listener );
-          audio.setBuffer(abuffer);
+          audio.setBuffer(audiomanager.getRandomBuffer());
           cube.add(audio);
           scene.add(cube);
           oldpointset.add(point.id);
