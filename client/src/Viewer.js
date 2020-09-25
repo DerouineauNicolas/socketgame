@@ -1,33 +1,36 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import fragmentShader from './shader.js'
 
 var oldplayerset = new Set();
 var oldpointset = new Set();
 var scene;
 var gamestate = [];
 var num_player = 1;
+//var time = 1;
 
 
 function initGameContext(mount)
 {
   let width = mount.current.clientWidth
   let height = mount.current.clientHeight
-  let frameId
+  let frameId;
 
 
   scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 1000)
   const renderer = new THREE.WebGLRenderer({ antialias: true })
 
-
-
-
   var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
 
-  var planematerial = new THREE.MeshLambertMaterial({
-    color: 0x00ff00,
-    side: THREE.DoubleSide
+  const uniforms = {
+    iTime: { value: 0 },
+    iResolution:  { value: new THREE.Vector3() },
+  };
+  const planematerial = new THREE.ShaderMaterial({
+    fragmentShader,
+    uniforms,
   });
   
   var plane = new THREE.Mesh( planegeometry, planematerial );
@@ -71,7 +74,7 @@ function initGameContext(mount)
     renderScene()
   }
   
-  const animate = () => {
+  const animate = (time) => {
     if(gamestate.Players){
       let newplayerset = new Set();
       let newpointset = new Set();
@@ -140,6 +143,9 @@ function initGameContext(mount)
       );
 
     }
+    time *= 0.001;  // convert to seconds
+    uniforms.iResolution.value.set(mount.current.clientWidth, mount.current.clientHeight, 1);
+    uniforms.iTime.value = time;
     controls.update();
 
     renderer.render( scene, camera );
