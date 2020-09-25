@@ -20,7 +20,7 @@ var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'ambiance.mp3', function( buffer ) {
 	soundAmbiance.setBuffer( buffer );
 	soundAmbiance.setLoop( true );
-	soundAmbiance.setVolume( 0.5 );
+	soundAmbiance.setVolume( 1);
 	soundAmbiance.play();
 });
 
@@ -77,7 +77,7 @@ function initGameContext(mount)
     renderer.render(scene, camera)
   }
 
-  var audiomanager = new AudioManager();
+  var audiomanager = new AudioManager(['a.mp3', 'b.mp3', 'e.mp3']);
 
   const handleResize = () => {
     width = mount.current.clientWidth
