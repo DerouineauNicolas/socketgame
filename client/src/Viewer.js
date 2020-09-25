@@ -13,7 +13,6 @@ var listener = new THREE.AudioListener();
 
 // create a global audio source
 var soundAmbiance = new THREE.Audio( listener );
-var anote = new THREE.Audio( listener );
 var bnote = new THREE.Audio( listener );
 
 // load a sound and set it as the Audio object's buffer
@@ -25,12 +24,7 @@ audioLoader.load( 'ambiance.mp3', function( buffer ) {
 	soundAmbiance.play();
 });
 
-audioLoader.load( 'a.mp3', function( buffer ) {
-	anote.setBuffer( buffer );
-	anote.setVolume( 0.5 );
-});
-//var time = 1;
-
+var abuffer = null;
 
 function initGameContext(mount)
 {
@@ -42,6 +36,10 @@ function initGameContext(mount)
   scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 1000)
   const renderer = new THREE.WebGLRenderer({ antialias: true })
+
+  audioLoader.load( 'a.mp3', function( buffer ) {
+    abuffer = buffer;
+  });
 
   var planegeometry = new THREE.PlaneGeometry( 50, 20, 32 );
 
@@ -79,7 +77,6 @@ function initGameContext(mount)
   camera.position.y = -50;
   camera.up.set( 0, 0, 1 );
   camera.lookAt(0, 0, 0);
-  //renderer.setClearColor('#000000')
   renderer.setSize(width, height)
 
   const renderScene = () => {
@@ -142,9 +139,11 @@ function initGameContext(mount)
           cube.name = point.id;
           cube.position.set( point.x, point.y, 1 );
           cube.visible = true;
+          var audio = new THREE.PositionalAudio( listener );
+          audio.setBuffer(abuffer);
+          cube.add(audio);
           scene.add(cube);
           oldpointset.add(point.id);
-          //num_player++;
         }
         newpointset.add(point.id);
       })
@@ -156,9 +155,12 @@ function initGameContext(mount)
       difference.forEach( element => {
               var mesh = scene.getObjectByName( element);
               if(mesh){
+                var audio = mesh.children[ 0 ];
+                console.log(audio);
+                audio.play(); 
                 scene.remove(mesh);
                 /*TBD: Memory should be cleared here !!! */
-                anote.play();
+                //anote.play();
               }
           }
         
