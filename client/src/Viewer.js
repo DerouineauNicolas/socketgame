@@ -8,6 +8,27 @@ var oldpointset = new Set();
 var scene;
 var gamestate = [];
 var num_player = 1;
+// create an AudioListener and add it to the camera
+var listener = new THREE.AudioListener();
+
+// create a global audio source
+var soundAmbiance = new THREE.Audio( listener );
+var anote = new THREE.Audio( listener );
+var bnote = new THREE.Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+var audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'ambiance.mp3', function( buffer ) {
+	soundAmbiance.setBuffer( buffer );
+	soundAmbiance.setLoop( true );
+	soundAmbiance.setVolume( 0.5 );
+	soundAmbiance.play();
+});
+
+audioLoader.load( 'a.mp3', function( buffer ) {
+	anote.setBuffer( buffer );
+	anote.setVolume( 0.5 );
+});
 //var time = 1;
 
 
@@ -137,6 +158,7 @@ function initGameContext(mount)
               if(mesh){
                 scene.remove(mesh);
                 /*TBD: Memory should be cleared here !!! */
+                anote.play();
               }
           }
         
